@@ -1,0 +1,1 @@
+- [Avoid AI/Claude writing tells](feedback_avoid_ai_tells.md) — suppress em-dash parentheticals, "You're absolutely right" reflexes, AI vocab (delve/leverage/tapestry), formatting overreach, and Claude Code self-narration
