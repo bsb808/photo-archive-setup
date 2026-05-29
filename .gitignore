@@ -1,0 +1,40 @@
+# Secrets and environment
+.env
+*.env
+!*.env.example
+secrets/
+*.secret
+
+# Never commit actual photos/videos or backups into this repo
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.tif
+*.tiff
+*.bmp
+*.gif
+*.cr2
+*.nef
+*.arw
+*.dng
+*.mp4
+*.mov
+*.avi
+*.wmv
+*.3gp
+*.m4v
+*.zip
+*.rar
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*~
+*.swp
+.idea/
+.vscode/
+
+# Local scratch
+tmp/
+*.log
