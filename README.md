@@ -18,7 +18,7 @@ Remote access via Tailscale (trusted family) or Cloudflare Tunnel (public share 
 
 | Path | Contents |
 |------|----------|
-| [docs/tradestudy.md](docs/tradestudy.md) | Full decision aid: requirements, candidate comparison, scoring, and the data-grounded review of the actual archive (Section 12). |
+| [docs/tradestudy.md](docs/tradestudy.md) | Full decision aid: requirements, the measured archive (Section 3), candidate comparison, scoring, architecture, and access control. |
 | [docs/plan.md](docs/plan.md) | Living plan & TODO. Phase 1 = lock decisions; Phase 2 = transition to the clean setup. Includes the decision log. |
 | `scripts/` | Cleanup and metadata/date-normalization scripts (drafted, reviewed before running). |
 | `config/` | Server config: Docker Compose, ignore patterns, backup config. |
