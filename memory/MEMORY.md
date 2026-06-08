@@ -1,1 +1,2 @@
 - [Avoid AI/Claude writing tells](feedback_avoid_ai_tells.md) — suppress em-dash parentheticals, "You're absolutely right" reflexes, AI vocab (delve/leverage/tapestry), formatting overreach, and Claude Code self-narration
+- [Photo archive project](project_photo_archive.md) — self-hosted photo archive design repo; "files are the truth", 3-layer architecture, currently Phase 1 (deciding D1–D7)
