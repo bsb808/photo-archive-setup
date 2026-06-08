@@ -31,33 +31,35 @@ Locked decisions:
 | D5 | Remote access | Cloudflare Tunnel + Immich password share links | Public HTTPS link + one shared password (R10) |
 | D6 | Off-site backup | Both: B2 cloud + annual rotated USB HDD | Full 3-2-1 |
 | D7 | Cleanup | Quarantine → review → delete | Reversible; nothing deleted before the safety backup |
+| D8 | Videos | Separate `Videos/` store — backed up (Layer 3), not served by Immich | Photos-first; video size/serving deferred |
+
+Scope — photos first. This design covers photos. The ~870 video files are moved out of the served photo tree into a separate `Videos/` store that is backed up like everything else (Layer 3) but not served by Immich — video size and streaming are a separate problem we're deliberately not taking on now. The folder, metadata, and backup approach here would extend to video later if that changes.
 
 ---
 
 ## 2. Build roadmap (high level)
 
-% CLAUDE: Should we prototype this with a small sample first?   I could just use a couple of photo directories?
-% CLAUDE: Also, for now let's just do photos.  The design should be feasible for videos as well, but videos are more of a challenge because of size and I probably don't want to serve video.  Better just to separate videos and have a backup strategy.
-
-Each phase is deliberately coarse here; we'll add command-level detail as we work through them.
+Each phase is deliberately coarse here; we'll add command-level detail as we work through them. Approach: every phase that runs a script over the archive is prototyped on a small sample first — a couple of event folders plus a few scans — and validated end to end before it touches the full tree.
 
 Phase 0 — Prep & staging
 - Install `exiftool` and digiKam.
-- Make a full, verified safety copy of the current archive (the rollback point). Nothing destructive happens before this exists. % CLAUDE: Done - backed up to an external drive. 
+- Safety copy of the current archive (the rollback point) — done: backed up to an external drive. Nothing destructive happens before this exists.
+- Pick the small prototype sample (a couple of event folders + a few scans) and run the whole pipeline on it first — cleanup, date-normalization, digiKam writeback, Immich indexing — before applying anything to the full archive.
 - Start on the existing internal SSD copy as the working master; migrate to the dedicated drive later (cheap: re-point Immich's library path, re-index, re-target backups).
 
 Phase 1 — Clean the tree
 - Quarantine cruft (344 `@eaDir`, 178 `.db`/`.ini`/`Thumbs.db`, 349 old `.html`/`.css`, 15 stray non-photo files) → review → delete.
+- Separate videos: move the ~870 video files out of the photo tree into the `Videos/` store (D8) — backed up, not served.
+- Normalize folder names to the `YYYYMMDD_event` convention — standardize mixed date formats (→ `YYYYMMDD`) and dash/underscore separators. Semi-automated: a script proposes the renames, you review before applying.
 - Date-normalize the scans per D3 (one-time scripted `exiftool` pass; dry-run one folder first).
 - Sort the phone dump into year-level folders (`YYYY_phone/`) by capture date — a one-time `exiftool` pass.
-% CLAUDE: Let's add some cleanup of the naming convention.   I've probabaly used diffrent date formats (what to standardize on YYYYMMDD) and dashes vs underscores.   Can do this semi-automated.  
 
 Phase 2 — Metadata layer
 - Point digiKam at the clean tree; configure embedded IPTC/EXIF writeback.
 - Add folder-level descriptions; add per-photo names on the scanned historical photos.
 
 Phase 3 — Online layer
-- Stand up Immich via Docker as a read-only External Library on the master tree. % CLAUDE: I'd like to understand why we are doin gthis with docker
+- Stand up Immich via Docker as a read-only External Library on the master tree. (Docker because Immich ships as a multi-service stack — web/API server, machine-learning, PostgreSQL, Redis — that the project officially packages and supports only as a Docker Compose deployment. Compose runs and version-pins all of it from one file, isolates it from the host OS, and makes upgrades and rollbacks clean; installing those services bare-metal is unsupported and fragile.)
 - Install mobile apps; validate the headline flow: find a 1972 and a 1996 photo by date.
 
 Phase 4 — Remote access & sharing
